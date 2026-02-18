@@ -1,5 +1,6 @@
 from django.contrib import admin
 from rango.models import Category, Page
+from rango.models import UserProfile
 
 # Customize page admin to show more columns
 class PageAdmin(admin.ModelAdmin):
@@ -12,3 +13,5 @@ class CategoryAdmin(admin.ModelAdmin):
 # Register the models with their respective customised Admin classes
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Page, PageAdmin)
+
+admin.site.register(UserProfile)
