@@ -5,6 +5,8 @@ from rango.forms import CategoryForm, PageForm
 from rango.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+
 
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
@@ -127,4 +129,21 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
+    return redirect(reverse('rango:index'))
+
+@login_required
+def restricted(request):
+    return render(request, 'rango/restricted.html')
+
+def track_url(request):
+    page_id = request.GET.get('page_id')
+    if page_id:
+        try:
+            page = Page.objects.get(id=page_id)
+            page.views = page.views + 1
+            page.save()
+            return redirect(page.url)
+        except Page.DoesNotExist:
+            return redirect(reverse('rango:index'))
+    
     return redirect(reverse('rango:index'))
